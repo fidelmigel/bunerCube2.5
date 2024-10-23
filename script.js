@@ -81,11 +81,11 @@ function getContent(content) {
 function addButtonsToFace() {
   const frontFace = document.querySelector(".front"); // Отримуємо передню грань куба.
 
-  const playPauseButtonConfig = dataItems[0]["play-pause-button"]; // Конфігурація кнопки Play-Pause.
   const soundButtonConfig = dataItems[0]["sound-button"]; // Конфігурація кнопки звуку.
 
   // Створюємо кнопку звуку.
   let soundButton = document.createElement("img");
+  soundButton.id = "soundButton"; // Додаємо ідентифікатор для кнопки.
   soundButton.src = soundButtonConfig.url; // Встановлюємо URL зображення для кнопки звуку.
   soundButton.style.width = soundButtonConfig.width;
   soundButton.style.height = soundButtonConfig.height;
@@ -94,6 +94,12 @@ function addButtonsToFace() {
   soundButton.style.right = "10px"; // Встановлюємо відступ справа на 10px.
   soundButton.style.cursor = "pointer";
   frontFace.appendChild(soundButton); // Додаємо кнопку звуку на передню грань.
+
+  // Додаємо обробник кліку для кнопки звуку.
+  soundButton.addEventListener("click", function () {
+    console.log("Sound button clicked!");
+    // Додайте тут код для керування звуком відео чи іншого контенту.
+  });
 }
 
 function getValue(name, attr) {
