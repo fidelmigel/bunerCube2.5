@@ -72,7 +72,7 @@ function getContent(content) {
       if (item.type === "image") {
         return `<img src="${item.path}" style="position: absolute; top: ${item.top}; left: ${item.left}; width: ${item.width}; height: ${item.height};"/>`;
       } else if (item.type === "video") {
-        return `<video src="${item.path}" style="position: absolute; top: ${item.top}; left: ${item.left}; width: ${item.width}; height: ${item.height};" controls playsinline autoplay muted></video>`;
+        return `<video src="${item.path}" style="position: absolute; top: ${item.top}; left: ${item.left}; width: ${item.width}; height: ${item.height};" autoplay loop muted></video>`;
       }
     })
     .join(""); // Об'єднуємо всі елементи контенту в один рядок.
@@ -95,10 +95,23 @@ function addButtonsToFace() {
   soundButton.style.cursor = "pointer";
   frontFace.appendChild(soundButton); // Додаємо кнопку звуку на передню грань.
 
+  // Знаходимо відео елемент, який розташований на цій грані
+  let videoElement = frontFace.querySelector("video"); // Пошук відео на передній грані
+
   // Додаємо обробник кліку для кнопки звуку.
-  soundButton.addEventListener("click", function () {
-    console.log("Sound button clicked!");
-    // Додайте тут код для керування звуком відео чи іншого контенту.
+  soundButton.addEventListener("click", function (event) {
+    event.preventDefault(); // Запобігаємо переходу за посиланням.
+    event.stopPropagation(); // Зупиняємо подію від "пробігу" вгору по дереву DOM.
+
+    if (videoElement) {
+      if (videoElement.muted) {
+        videoElement.muted = false; // Увімкнути звук
+        soundButton.src = "images/volume-up.png"; // Змінюємо іконку на "звук увімкнено"
+      } else {
+        videoElement.muted = true; // Вимкнути звук
+        soundButton.src = "images/no-sound.png"; // Змінюємо іконку на "звук вимкнено"
+      }
+    }
   });
 }
 
