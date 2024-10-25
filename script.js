@@ -3,7 +3,7 @@ let autoRotateInterval; // Інтервал для автоматичного о
 let mouseMoveTimeout; // Таймер для відновлення автоматичного обертання після зупинки руху миші.
 
 const sensitivity = 5.0; // Чутливість миші для контролю обертання куба.
-const touchSensitivity = 5.0; // Чутливість сенсорного екрану для обертання.
+const touchSensitivity = 1.0; // Чутливість сенсорного екрану для обертання.
 
 const fusifyTag = document.querySelector("fusifytag"); // Отримуємо елемент <fusifytag>.
 const dataItems = JSON.parse(getValue("data-items", fusifyTag.attributes)); // Парсимо JSON з атрибута data-items.
