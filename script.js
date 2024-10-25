@@ -2,8 +2,8 @@ let y = 0; // Змінна для зберігання поточного кут
 let autoRotateInterval; // Інтервал для автоматичного обертання куба.
 let mouseMoveTimeout; // Таймер для відновлення автоматичного обертання після зупинки руху миші.
 
-const sensitivity = 0.9; // Чутливість миші для контролю обертання куба.
-const touchSensitivity = 0.05; // Чутливість сенсорного екрану для обертання.
+const sensitivity = 2.0; // Чутливість миші для контролю обертання куба.
+const touchSensitivity = 2.0; // Чутливість сенсорного екрану для обертання.
 
 const fusifyTag = document.querySelector("fusifytag"); // Отримуємо елемент <fusifytag>.
 const dataItems = JSON.parse(getValue("data-items", fusifyTag.attributes)); // Парсимо JSON з атрибута data-items.
@@ -86,7 +86,7 @@ function addButtonsToFace() {
   // Створюємо кнопку звуку.
   let soundButton = document.createElement("img");
   soundButton.id = "soundButton"; // Додаємо ідентифікатор для кнопки.
-  soundButton.src = soundButtonConfig.url; // Встановлюємо URL зображення для кнопки звуку.
+  soundButton.src = "images/no-sound.png"; // Іконка для "звук вимкнено" за замовчуванням
   soundButton.style.width = soundButtonConfig.width;
   soundButton.style.height = soundButtonConfig.height;
   soundButton.style.position = "absolute";
@@ -97,6 +97,11 @@ function addButtonsToFace() {
 
   // Знаходимо відео елемент, який розташований на цій грані
   let videoElement = frontFace.querySelector("video"); // Пошук відео на передній грані
+
+  // Вимикаємо звук за замовчуванням при завантаженні
+  if (videoElement) {
+    videoElement.muted = true; // Звук вимкнено за замовчуванням
+  }
 
   // Додаємо обробник кліку для кнопки звуку.
   soundButton.addEventListener("click", function (event) {
