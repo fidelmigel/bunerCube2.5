@@ -2,8 +2,8 @@ let y = 0; // Змінна для зберігання поточного кут
 let autoRotateInterval; // Інтервал для автоматичного обертання куба.
 let mouseMoveTimeout; // Таймер для відновлення автоматичного обертання після зупинки руху миші.
 
-const sensitivity = 2.0; // Чутливість миші для контролю обертання куба.
-const touchSensitivity = 2.0; // Чутливість сенсорного екрану для обертання.
+const sensitivity = 5.0; // Чутливість миші для контролю обертання куба.
+const touchSensitivity = 5.0; // Чутливість сенсорного екрану для обертання.
 
 const fusifyTag = document.querySelector("fusifytag"); // Отримуємо елемент <fusifytag>.
 const dataItems = JSON.parse(getValue("data-items", fusifyTag.attributes)); // Парсимо JSON з атрибута data-items.
@@ -196,6 +196,41 @@ window.onload = function () {
   makeHTML(); // Створюємо HTML-контент при завантаженні сторінки.
   replaceCSS(); // Застосовуємо стилі при завантаженні сторінки.
   startAutoRotate(); // Починаємо автоматичне обертання куба.
+
+  let isMouseOverCube = false; // Прапорець, який вказує, чи знаходиться курсор над кубом.
+  const cube = document.querySelector(".cube"); // Знаходимо елемент куба.
+
+  // Додаємо обробники подій для відстеження входу та виходу курсора з меж куба.
+  cube.addEventListener("mouseenter", function () {
+    isMouseOverCube = true; // Встановлюємо прапорець у true, коли курсор над кубом.
+  });
+
+  cube.addEventListener("mouseleave", function () {
+    isMouseOverCube = false; // Встановлюємо прапорець у false, коли курсор виходить за межі куба.
+  });
+
+  // Обробляємо подію руху миші для ручного обертання куба.
+  document.addEventListener("mousemove", function (e) {
+    if (isMouseOverCube) {
+      // Перевіряємо, чи знаходиться курсор над кубом.
+      stopAutoRotate(); // Зупиняємо автоматичне обертання при русі миші.
+      y += e.movementX * sensitivity; // Оновлюємо значення кута обертання в залежності від руху миші.
+      updateCubeRotation(); // Оновлюємо обертання куба.
+      resetAutoRotate(); // Запускаємо таймер для автоматичного відновлення обертання.
+    }
+  });
+
+  // Обробляємо подію руху пальцем для сенсорних пристроїв.
+  document.addEventListener("touchmove", function (e) {
+    const touch = e.touches[0]; // Отримуємо перший дотик.
+    if (isMouseOverCube) {
+      // Перевіряємо, чи курсор (або палець) над кубом.
+      stopAutoRotate(); // Зупиняємо автоматичне обертання.
+      y += (touch.clientX - window.innerWidth / 2) * touchSensitivity; // Оновлюємо обертання куба в залежності від руху пальця.
+      updateCubeRotation(); // Оновлюємо обертання куба.
+      resetAutoRotate(); // Запускаємо таймер для автоматичного відновлення обертання.
+    }
+  });
 };
 
 window.onresize = function () {
@@ -223,20 +258,3 @@ function resetAutoRotate() {
 function updateCubeRotation() {
   document.querySelector(".cube").style.transform = `rotateY(${y}deg)`; // Оновлюємо обертання куба на основі значення 'y'.
 }
-
-// Обробляємо подію руху миші для ручного обертання куба.
-document.addEventListener("mousemove", function (e) {
-  stopAutoRotate(); // Зупиняємо автоматичне обертання при русі миші.
-  y += e.movementX * sensitivity; // Оновлюємо значення кута обертання в залежності від руху миші.
-  updateCubeRotation(); // Оновлюємо обертання куба.
-  resetAutoRotate(); // Запускаємо таймер для автоматичного відновлення обертання.
-});
-
-// Обробляємо подію руху пальцем для сенсорних пристроїв.
-document.addEventListener("touchmove", function (e) {
-  const touch = e.touches[0]; // Отримуємо перший дотик.
-  stopAutoRotate(); // Зупиняємо автоматичне обертання.
-  y += (touch.clientX - window.innerWidth / 2) * touchSensitivity; // Оновлюємо обертання куба в залежності від руху пальця.
-  updateCubeRotation(); // Оновлюємо обертання куба.
-  resetAutoRotate(); // Запускаємо таймер для автоматичного відновлення обертання.
-});
